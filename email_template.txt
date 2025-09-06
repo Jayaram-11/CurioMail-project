@@ -1,0 +1,10 @@
+Hi there,
+
+Here’s your daily curiosity bite from CurioSpark:
+
+Question: [Question_Title]
+
+Answer: [Answer_Text]
+
+Stay curious,
+ -Jayaram

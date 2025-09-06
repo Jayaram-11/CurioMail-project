@@ -1,0 +1,18 @@
+# --- Secrets ---
+# Never, ever commit your .env file to GitHub.
+.env
+
+# --- Virtual Environment ---
+# We don't need to upload our installed libraries.
+venv/
+.venv/
+
+# --- Python Cache Files ---
+# These are temporary files Python creates.
+__pycache__/
+*.pyc
+
+# --- IDE-specific files ---
+# Temporary files from PyCharm and VS Code.
+.idea/
+.vscode/
