@@ -1,16 +1,12 @@
-
 from get_content import NotionContentManager
 from database import Email_Storage
 from send_email import SendEmail
 from config import DATABASE_ID,notion
 
-'''token=dotenv_values(".env")["NOTION_INTEGRATION_TOKEN"]
-database_id=dotenv_values(".env")["DATABASE_ID"]
-page_id=dotenv_values(".env")["PAGE_ID"]
-notion = Client(auth=token)'''
 
 def run_daily():
     print("Fetching next scheduled content from Notion...")
+    email_manager=Email_Storage()
     content_manager = NotionContentManager(notion_client=notion, database_id=DATABASE_ID)
     content_to_send = content_manager.get_next_scheduled_content()
     if not content_to_send:
@@ -22,12 +18,9 @@ def run_daily():
     answer = content_to_send["answer"]
     #print(f"Successfully fetched content from page ID: {page_id}")
     #print(f"  -> Question: {question}")
-
-
     print("Retrieving subscriber emails from the database...")
 
     subscribers = email_manager.get_subscribers()
-
 
     if not subscribers:
         print("Process finished: No subscribers found in the database. Will not send email.")
@@ -39,8 +32,8 @@ def run_daily():
     print("Sending email broadcast to all subscribers...")
     # This function should handle sending the email to the list of recipients.
     # It should return True for success and False for failure.
-    se=SendEmail()
-    email_sent_successfully = se.send_email(
+    email_sender=SendEmail()
+    email_sent_successfully = email_sender.send_email(
         recipients=subscribers,
         question=question,
         answer=answer
@@ -59,8 +52,8 @@ def run_daily():
 
 # --- Main execution block ---
 if __name__ == '__main__':
-    email_manager=Email_Storage()
-    email_manager.initialize_db()
+    temp_email_manager=Email_Storage()
+    temp_email_manager.initialize_db()
 
     run_daily()
 

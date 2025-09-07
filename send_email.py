@@ -1,10 +1,14 @@
 import smtplib
 from email.message import EmailMessage
+from textwrap import dedent
 from pickletools import read_unicodestringnl
 from config import FROM_ADDR,EMAIL_PASSWORD
 
 class SendEmail:
     def send_email(self,recipients,question,answer):
+        if not FROM_ADDR or not EMAIL_PASSWORD:
+            print("FATAL ERROR: FROM_ADDR or EMAIL_PASSWORD not found. Check your environment variables.")
+            return False
         try:
             connection = smtplib.SMTP('smtp.gmail.com', 587)
             connection.starttls()
