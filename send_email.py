@@ -2,7 +2,7 @@ import smtplib
 from email.message import EmailMessage
 from textwrap import dedent
 from pickletools import read_unicodestringnl
-from config import FROM_ADDR,EMAIL_PASSWORD
+from config import FROM_ADDR,EMAIL_PASSWORD,BASE_URL
 
 class SendEmail:
     def send_email(self,recipients,question,answer):
@@ -22,11 +22,18 @@ class SendEmail:
                 msg['To'] = email
                 msg['Subject'] = f"Your Daily Curiosity Spark – {question}"
 
+                unsubscribe_url = f"{BASE_URL}/unsubscribe?email={email}"
+                website_url = BASE_URL
+                suggestions_url = f"{BASE_URL}/#suggestions"
+
                 formatted_answer = answer.replace('\n', '<br>')
-                new_template = html_template.replace("{{QUESTION}}", question).replace("{{ANSWER}}", formatted_answer)
+                populated_html = html_template.replace("{{QUESTION}}", question)
+                populated_html = populated_html.replace("{{ANSWER}}", formatted_answer)
+                populated_html = populated_html.replace("{{WEBSITE_URL}}", website_url)
+                populated_html = populated_html.replace("{{SUGGESTIONS_URL}}", suggestions_url)
+                populated_html = populated_html.replace("{{UNSUBSCRIBE_URL}}", unsubscribe_url)
 
-                msg.add_alternative(new_template, subtype='html')
-
+                msg.add_alternative(populated_html, subtype='html')
                 connection.send_message(msg)
                 print(f"Successfully sent email to {email}")
             connection.quit()
