@@ -3,19 +3,12 @@ from datetime import date
 
 class NotionContentManager:
     def __init__(self, notion_client, database_id):
-        """
-        Initializes the manager with the Notion client and database ID.
-        """
+
         self.notion = notion_client
         self.database_id = database_id
 
     def get_next_scheduled_content(self):
-        """
-        Queries Notion for the first item with the status "Scheduled",
-        ordered by the 'ID' property.
 
-        Returns a dictionary with page_id, question, and answer, or None if none are found.
-        """
         try:
             # This query asks the Notion API to do the filtering and sorting for us.
             # It's much more efficient than fetching everything.
@@ -39,34 +32,24 @@ class NotionContentManager:
 
             properties = page_data.get("properties", {})
 
-            # Safely extract question
-            question_title = properties.get("Question", {}).get("title", [])
-            question = question_title[0].get("text", {}).get("content") if question_title else "No Question"
+            # --- BULLETPROOF QUESTION PARSING ---
+            question = "A Spark of Curiosity"  # Default title if none is found
+            question_title_list = properties.get("Question", {}).get("title", [])
+            if question_title_list:
+                # Safely get the text content, defaulting to an empty string if keys are missing
+                question = question_title_list[0].get("text", {}).get("content", question)
 
-            # Safely extract answer
-            answer_blocks = properties.get("Answer", {}).get("rich_text", [])
-
-            # This list will hold our HTML-formatted text parts
+            # --- BULLETPROOF ANSWER PARSING ---
             html_answer_parts = []
-
-            # Loop through each block of text from Notion
+            answer_blocks = properties.get("Answer", {}).get("rich_text", [])
             for block in answer_blocks:
                 text_content = block.get("plain_text", "")
                 annotations = block.get("annotations", {})
-
-                # Check for bold formatting
                 if annotations.get("bold"):
-                    # If bold, wrap the text in HTML <strong> tags
                     text_content = f"<strong>{text_content}</strong>"
-
-                # You can add more checks here for italics, underlines, etc. in the future
-                # if annotations.get("italic"):
-                #     text_content = f"<em>{text_content}</em>"
-
                 html_answer_parts.append(text_content)
 
-            # Join all the formatted parts into a single string.
-            # This string now contains HTML tags for formatting.
+            # This will result in an empty string "" if the answer field is empty, not None.
             answer = "".join(html_answer_parts)
 
             return {
