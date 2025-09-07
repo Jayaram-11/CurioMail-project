@@ -3,9 +3,9 @@ from email.message import EmailMessage
 from pickletools import read_unicodestringnl
 from  textwrap import dedent
 from dotenv import dotenv_values
-
-FROM_ADDR="jayaramg1104@gmail.com"
-EMAIL_PASSWORD=dotenv_values(".env")["EMAIL_PASSWORD"]
+from config import FROM_ADDR,EMAIL_PASSWORD
+#FROM_ADDR="curiomail.daily@gmail.com"
+#EMAIL_PASSWORD=dotenv_values(".env")["EMAIL_PASSWORD"]
 
 class SendEmail:
     def send_email(self,recipients,question,answer):

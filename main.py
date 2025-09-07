@@ -3,16 +3,16 @@ from dotenv import dotenv_values
 from get_content import NotionContentManager
 from database import Email_Storage
 from send_email import SendEmail
+from config import NOTION_INTEGRATION_TOKEN,DATABASE_ID
 
-
-token=dotenv_values(".env")["NOTION_INTEGRATION_TOKEN"]
+'''token=dotenv_values(".env")["NOTION_INTEGRATION_TOKEN"]
 database_id=dotenv_values(".env")["DATABASE_ID"]
 page_id=dotenv_values(".env")["PAGE_ID"]
-notion = Client(auth=token)
+notion = Client(auth=token)'''
 
 def run_daily():
     print("Fetching next scheduled content from Notion...")
-    content_manager = NotionContentManager(notion_client=notion, database_id=database_id)
+    content_manager = NotionContentManager(notion_client=NOTION_INTEGRATION_TOKEN, database_id=DATABASE_ID)
     content_to_send = content_manager.get_next_scheduled_content()
     if not content_to_send:
         print("Process finished: No scheduled content found in Notion.")
