@@ -16,3 +16,5 @@ __pycache__/
 # Temporary files from PyCharm and VS Code.
 .idea/
 .vscode/
+# --- Database Files ---
+*.db
