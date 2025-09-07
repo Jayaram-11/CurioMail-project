@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 # Assuming your database functions are now in database.py
 from database import Email_Storage
@@ -8,11 +8,15 @@ def create_app():
     """Creates and configures the Flask application."""
     email_manager=Email_Storage()
     email_manager.initialize_db()
-
     app = Flask(__name__)
-
-
     CORS(app)
+
+    @app.route('/')
+    def serve_index():
+        """Serves the index.html file from the static folder."""
+        return send_from_directory(app.static_folder, 'index.html')
+
+
     @app.route('/subscribe', methods=['POST'])
     def subscribe():
         data = request.get_json()
