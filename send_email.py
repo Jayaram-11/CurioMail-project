@@ -10,11 +10,6 @@ class SendEmail:
             print("FATAL ERROR: FROM_ADDR or EMAIL_PASSWORD not found. Check your environment variables.")
             return False
         try:
-            print(f"DEBUG: Type of 'question' on arrival: {type(question)}")
-            print(f"DEBUG: Value of 'question': {question}")
-            print(f"DEBUG: Type of 'answer' on arrival: {type(answer)}")
-            print(f"DEBUG: Value of 'answer': {answer}")
-            print("--- End of diagnostics ---")
             connection = smtplib.SMTP('smtp.gmail.com', 587)
             connection.starttls()
             connection.login(FROM_ADDR, EMAIL_PASSWORD)
@@ -25,15 +20,15 @@ class SendEmail:
                 msg = EmailMessage()
                 msg['From'] = FROM_ADDR
                 msg['To'] = email
-                msg['Subject'] = f"Your Daily Curiosity Spark – {question}"
+                safe_subject_question = question.strip().replace('\n', ' ')
+                msg['Subject'] = f"Your Daily Curiosity Spark – {safe_subject_question}"
 
                 unsubscribe_url = f"{BASE_URL}/unsubscribe?email={email}"
                 website_url = BASE_URL
                 suggestions_url = f"{BASE_URL}/#suggestions"
 
                 formatted_answer = answer.replace('\n', '<br>')
-                print(f"Type of formatted_answer:{type(formatted_answer)}")
-                print(f"Type of question:{type(question)}")
+
                 populated_html = html_template.replace("{{QUESTION}}", question)
                 populated_html = populated_html.replace("{{ANSWER}}", formatted_answer)
                 populated_html = populated_html.replace("{{WEBSITE_URL}}", website_url)
