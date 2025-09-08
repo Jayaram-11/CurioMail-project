@@ -23,19 +23,25 @@ class SendEmail:
                 safe_subject_question = question.strip().replace('\n', ' ')
                 msg['Subject'] = f"Your Daily Curiosity Spark – {safe_subject_question}"
 
+                hardcoded_html_body = f"""
+                                <html>
+                                <body>
+                                    <h1>This is a successful test!</h1>
+                                    <p>If you are seeing this email, it means the core login and sending functions are working perfectly.</p>
+                                    <hr>
+                                    <p><b>Question Received:</b> {question}</p>
+                                </body>
+                                </html>"""
+
                 unsubscribe_url = f"{BASE_URL}/unsubscribe?email={email}"
                 website_url = BASE_URL
                 suggestions_url = f"{BASE_URL}/#suggestions"
+                print(f"Type of unsubscribe url :{type(unsubscribe_url)}")
+                print(f"Type of website url :{type(website_url)}")
+                print(f"Type of suggestion url :{type(suggestions_url)}")
 
-                formatted_answer = answer.replace('\n', '<br>')
 
-                populated_html = html_template.replace("{{QUESTION}}", question)
-                populated_html = populated_html.replace("{{ANSWER}}", formatted_answer)
-                populated_html = populated_html.replace("{{WEBSITE_URL}}", website_url)
-                populated_html = populated_html.replace("{{SUGGESTIONS_URL}}", suggestions_url)
-                populated_html = populated_html.replace("{{UNSUBSCRIBE_URL}}", unsubscribe_url)
-
-                msg.add_alternative(populated_html, subtype='html')
+                msg.add_alternative(hardcoded_html_body, subtype='html')
                 connection.send_message(msg)
                 print(f"Successfully sent email to {email}")
             connection.quit()
