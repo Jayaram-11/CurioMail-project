@@ -2,7 +2,7 @@ from get_content import NotionContentManager
 from database import Email_Storage
 from send_email import SendEmail
 from config import DATABASE_ID,notion
-
+# main file
 
 def run_daily():
     print("Fetching next scheduled content from Notion...")
