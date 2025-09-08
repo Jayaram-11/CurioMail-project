@@ -1,4 +1,4 @@
-import random
+
 from datetime import date
 
 class NotionContentManager:
@@ -39,9 +39,10 @@ class NotionContentManager:
                 # Safely get the text content, defaulting to an empty string if keys are missing
                 question = question_title_list[0].get("text", {}).get("content", question)
 
-            # --- BULLETPROOF ANSWER PARSING ---
+
             html_answer_parts = []
-            answer_blocks = properties.get("Answer", {}).get("rich_text", [])
+            answer_blocks = properties.get("Answer", {}).get("rich_text",[])
+
             for block in answer_blocks:
                 text_content = block.get("plain_text", "")
                 annotations = block.get("annotations", {})
@@ -63,10 +64,6 @@ class NotionContentManager:
             return None
 
     def update_content_status_to_sent(self, page_id: str):
-        """
-        Updates a specific Notion page to set its status to "Sent"
-        and fills in today's date in the "Schedule Date" field.
-        """
         try:
             today_iso = date.today().isoformat()
 
