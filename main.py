@@ -13,11 +13,13 @@ def run_daily():
         print("Process finished: No scheduled content found in Notion.")
         return
 
-    page_id = content_to_send["page_id"]
-    question = content_to_send["question"]
-    answer = content_to_send["answer"]
-    #print(f"Successfully fetched content from page ID: {page_id}")
-    #print(f"  -> Question: {question}")
+    page_id = content_to_send.get("page_id")
+    question = content_to_send.get("question")
+
+    answer = content_to_send.get("answer")
+    if answer is None:
+        print("WARNING: Notion parser returned a None value for the answer. Forcing it to an empty string.")
+        answer = ""
     print("Retrieving subscriber emails from the database...")
 
     subscribers = email_manager.get_subscribers()
