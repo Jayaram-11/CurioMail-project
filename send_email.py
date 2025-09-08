@@ -27,6 +27,8 @@ class SendEmail:
                 suggestions_url = f"{BASE_URL}/#suggestions"
 
                 formatted_answer = answer.replace('\n', '<br>')
+                print(f"Type of formatted_answer:{formatted_answer}")
+                print(f"Type of question:{question}")
                 populated_html = html_template.replace("{{QUESTION}}", question)
                 populated_html = populated_html.replace("{{ANSWER}}", formatted_answer)
                 populated_html = populated_html.replace("{{WEBSITE_URL}}", website_url)
