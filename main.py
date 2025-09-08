@@ -17,8 +17,6 @@ def run_daily():
     question = content_to_send.get("question")
     answer = content_to_send.get("answer")
 
-    print(f"DEBUG: Type of 'question' variable is: {type(question)}")
-    print(f"DEBUG: Type of 'answer' variable is: {type(answer)}")
     if answer is None:
         print("WARNING: Notion parser returned a None value for the answer. Forcing it to an empty string.")
         answer = ""
