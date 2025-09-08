@@ -24,7 +24,7 @@ class SendEmail:
                 msg['Subject'] = f"Your Daily Curiosity Spark – {safe_subject_question}"
 
                 unsubscribe_url = f"{BASE_URL}/unsubscribe?email={email}"
-                website_url = BASE_URL
+                website_url = f"{BASE_URL}"
                 suggestions_url = f"{BASE_URL}/#suggestions"
 
                 formatted_answer = answer.replace('\n', '<br>')
