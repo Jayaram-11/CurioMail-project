@@ -10,15 +10,14 @@ class NotionContentManager:
     def get_next_scheduled_content(self):
 
         try:
-            # This query asks the Notion API to do the filtering and sorting for us.
-            # It's much more efficient than fetching everything.
+
             response = self.notion.databases.query(
                 database_id=self.database_id,
-                # Filter 1: Only get pages where the 'Status' is 'Scheduled'
+
                 filter={"property": "Status", "select": {"equals": "Scheduled"}},
-                # Sort by the 'ID' column to ensure we get them in order (1, 2, 3...)
+
                 sorts=[{"property": "ID", "direction": "ascending"}],
-                # We only need the very next one, so we set page_size to 1
+
                 page_size=1
             )
             #print(response)
@@ -26,17 +25,17 @@ class NotionContentManager:
                 print("No scheduled content found.")
                 return None
 
-            # --- Parse the single result ---
+
             page_data = response["results"][0]
             page_id = page_data["id"]
 
             properties = page_data.get("properties", {})
 
-            # --- BULLETPROOF QUESTION PARSING ---
-            question = "A Spark of Curiosity"  # Default title if none is found
+            #default question
+            question = "A Spark of Curiosity"
             question_title_list = properties.get("Question", {}).get("title", [])
             if question_title_list:
-                # Safely get the text content, defaulting to an empty string if keys are missing
+
                 question = question_title_list[0].get("text", {}).get("content", question)
 
 
@@ -50,7 +49,7 @@ class NotionContentManager:
                     text_content = f"<strong>{text_content}</strong>"
                 html_answer_parts.append(text_content)
 
-            # This will result in an empty string "" if the answer field is empty, not None.
+
             answer = "".join(html_answer_parts)
 
             return {

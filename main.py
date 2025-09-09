@@ -32,8 +32,7 @@ def run_daily():
 
 
     print("Sending email broadcast to all subscribers...")
-    # This function should handle sending the email to the list of recipients.
-    # It should return True for success and False for failure.
+
     email_sender=SendEmail()
     email_sent_successfully = email_sender.send_email(
         recipients=subscribers,
@@ -41,7 +40,7 @@ def run_daily():
         answer=answer
     )
 
-    # --- Step 4: Update Notion status ONLY if emails were sent successfully ---
+   #updatin notion
     if email_sent_successfully:
         print("\nEmail broadcast successful. Updating Notion status to 'Sent'...")
         content_manager.update_content_status_to_sent(page_id)
@@ -52,7 +51,6 @@ def run_daily():
 
 
 
-# --- Main execution block ---
 if __name__ == '__main__':
     temp_email_manager=Email_Storage()
     temp_email_manager.initialize_db()
